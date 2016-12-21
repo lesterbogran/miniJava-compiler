@@ -8,6 +8,8 @@
 
 * [flex与bison](https://book.douban.com/subject/6109479/)
 
+* [Flex and Bison](http://aquamentus.com/flex_bison.html)
+
 # author
 
 me@qzane.com
