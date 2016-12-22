@@ -5,4 +5,6 @@
 *.lex.c
 *.tab.c
 *.tab.h
+*.o
+lex.yy.c
 

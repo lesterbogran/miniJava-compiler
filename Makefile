@@ -1,18 +1,26 @@
+CCC = g++
+CCFLAGS= -O2
+LEX = flex
+LFLAGS= -8     
+YACC= bison 
+YFLAGS= -d -t -y
+
+RM = /bin/rm -f
+
 all: miniJava
 
-miniJava: miniJava.tab.c miniJava.lex.c
-	g++ -o $@ miniJava.tab.c miniJava.lex.c
+miniJava: y.tab.o lex.yy.o miniJava.o
+	${CCC} ${CCFLAGS} lex.yy.o y.tab.o miniJava.o -o miniJava
 
-miniJava.tab.c: miniJava.y
-	bison -d -o $@ miniJava.y
+miniJava.o: miniJava.cpp miniJava.h
+	${CCC} -c miniJava.cpp
+y.tab.o: miniJava.y
+	${YACC} ${YFLAGS} miniJava.y
+	${CCC} ${CCFLAGS} y.tab.c -c 
 
-miniJava.lex.c: miniJava.tab.c miniJava.l
-	flex -o $@ miniJava.l
+lex.yy.o: miniJava.l
+	${LEX} $(LFLAGS) miniJava.l
+	${CCC} ${CCFLAGS} lex.yy.c -c 
 
 clean:
-	rm miniJava.tab.c
-	rm miniJava.tab.h
-	rm miniJava.lex.c
-	rm miniJava
-
-
+	/bin/rm -f lex.yy.* y.tab.* *.o miniJava
