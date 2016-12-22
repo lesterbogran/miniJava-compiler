@@ -46,6 +46,8 @@ LETTER [a-zA-Z]
 "!" { return NOT; }
 "="  { return EQUALS; }
 
+[\[\]\.] { return *yytext; }
+
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*()= \t\n\f\r] { yymore(); }
 <ERROR>(.|\n) { yyless(yyleng-1); printf("error token: %s on line %d\n", yytext, line_num); 
