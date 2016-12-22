@@ -1,6 +1,6 @@
 set  -x
 make
-echo "idid=1+2/3*(4-5+VAR.length)*VAR{67-8}-9//+32sdf" > test.java
+echo "A=1+2*7/8-6;\nB=A-3+4;\nC=9/A[7];\nwhile(B>A){B=B-A/2;}\n" > test.java
 cat test.java | ./miniJava
 
 

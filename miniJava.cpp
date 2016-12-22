@@ -69,18 +69,88 @@ void exp_not_node::print(){
 	cout << ") ";
 }
 
+void state_node::print(){
+	cout << " ";
+}
+
+state_if_node::state_if_node(exp_node *cond, state_node *iftrue, 
+				  state_node *iffalse){
+	m_cond = cond;
+	m_iftrue = iftrue;
+	m_iffalse = iffalse;
+}
+
+void state_if_node::print(){
+	cout << "(if ";
+	m_cond->print();
+	m_iftrue->print();
+	m_iffalse->print();
+	cout << ") ";
+}
+
+state_while_node::state_while_node(exp_node *cond, state_node *state){
+	m_cond = cond;
+	m_state = state;
+}
+
+void state_while_node::print(){
+	cout << "(while ";
+	m_cond->print();
+	m_state->print();
+	cout << ") ";
+}
+
+state_print_node::state_print_node(exp_node *exp){
+	m_exp = exp;
+}
+
+void state_print_node::print(){
+	cout << "(System.out.println ";
+	m_exp->print();
+	cout << ") ";
+}
+state_assign_node::state_assign_node(string id=NULL, exp_node* exp=NULL){
+	m_id = new exp_id_node(id);
+	m_exp = exp;
+}
+
+void state_assign_node::print(){
+	cout << "(= ";
+	m_id->print();
+	m_exp->print();
+	cout << ") ";
+}
+
+state_list_assign_node::state_list_assign_node(string id, exp_node *where,
+						   exp_node *exp){
+	m_id = new exp_id_node(id);
+	m_where = where;
+	m_exp = exp;
+}
+
+void state_list_assign_node::print(){
+	cout << "(=";
+	m_id->print();
+	cout << '[';
+	m_where->print();
+	cout << ']';
+	m_exp->print();
+	cout << ") ";
+}
 
 
 
 
-
-
-
-
-
-
-
-
+pgm::pgm(vector<state_node *> *statelist){
+	m_statelist = statelist;
+}
+void pgm::print(){
+	for(int i=0;i<m_statelist->size();++i){
+		cout << "STATE" << i << ": ";
+		((*m_statelist)[i])->print();
+		cout << endl;
+	}
+}
 
 
 

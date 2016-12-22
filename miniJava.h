@@ -7,6 +7,7 @@
 
 using namespace std;
 
+///////////////  exp begin /////////////
 class exp_node {
 public:
 	int m_val;
@@ -52,4 +53,63 @@ public:
 	exp_not_node(exp_node* exp);
 	void print();
 };
-extern exp_node *root;
+////////// exp end /////////////
+
+///////// state begin /////////
+
+class state_node {
+public:
+	virtual void print();
+};
+
+class state_if_node : public state_node{
+public:
+	exp_node *m_cond;
+	state_node *m_iftrue;
+	state_node *m_iffalse;
+	state_if_node(exp_node *cond, state_node *iftrue, 
+				  state_node *iffalse);
+	void print();
+};
+
+class state_while_node : public state_node{
+public:
+	exp_node *m_cond;
+	state_node *m_state;
+	state_while_node(exp_node *cond, state_node *state);
+	void print();
+};
+class state_print_node : public state_node{
+public:
+	exp_node *m_exp;
+	state_print_node(exp_node *exp);
+	void print();
+};
+
+class state_assign_node : public state_node{
+public:
+	exp_id_node *m_id;
+	exp_node *m_exp;
+	state_assign_node(string id, exp_node* exp);
+	void print();
+};
+class state_list_assign_node : public state_node{
+public:
+	exp_id_node *m_id;
+	exp_node *m_where;
+	exp_node *m_exp;
+	state_list_assign_node(string id, exp_node *where,
+						   exp_node *exp);
+	void print();
+};
+
+
+class pgm {
+public:
+	vector<state_node *> *m_statelist;
+	pgm(vector<state_node *> *statelist);
+	void print();
+};
+
+
+extern pgm *root;

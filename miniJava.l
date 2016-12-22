@@ -23,6 +23,10 @@ LETTER [a-zA-Z]
 %x ERROR
 
 %%
+"if" { return IF; }
+"else" { return ELSE; }
+"while" { return WHILE; }
+"System.out.println" { return PRINT; }
 {DIGIT}+ {
 	yylval.num = atof(yytext); return NUMBER;
 }
@@ -45,9 +49,14 @@ LETTER [a-zA-Z]
 "&&" { return AND; }
 "||" { return OR; }
 "!" { return NOT; }
-"="  { return EQUALS; }
+"<" { return LESS; }
+">" { return MORE; }
+"="  { return ASSIGN; }
+"{" { return LBRACE; }
+"}" { return RBRACE; }
 
-[\[\]\.\{\}] { return *yytext; }
+
+[\[\]\.;] { return *yytext; }
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*()= \t\n\f\r] { yymore(); }
