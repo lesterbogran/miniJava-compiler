@@ -27,6 +27,7 @@ LETTER [a-zA-Z]
 "else" { return ELSE; }
 "while" { return WHILE; }
 "System.out.println" { return PRINT; }
+"new" { return NEW; }
 {DIGIT}+ {
 	yylval.num = atof(yytext); return NUMBER;
 }
@@ -51,6 +52,7 @@ LETTER [a-zA-Z]
 "!" { return NOT; }
 "<" { return LESS; }
 ">" { return MORE; }
+"==" { return EQUAL; }
 "="  { return ASSIGN; }
 "{" { return LBRACE; }
 "}" { return RBRACE; }

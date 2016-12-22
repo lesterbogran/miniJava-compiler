@@ -53,6 +53,20 @@ public:
 	exp_not_node(exp_node* exp);
 	void print();
 };
+class exp_new_node : public exp_node{
+public:
+	exp_id_node *m_id;
+	exp_new_node(string id);
+	void print();
+};
+class exp_new_list_node : public exp_node{
+public:
+	exp_id_node *m_id;
+	exp_node *m_size;
+	exp_new_list_node(string id, exp_node *size);
+	void print();
+};
+
 ////////// exp end /////////////
 
 ///////// state begin /////////

@@ -152,6 +152,26 @@ void pgm::print(){
 	}
 }
 
+exp_new_node::exp_new_node(string id){
+	m_id = new exp_id_node(id);
+}
+void exp_new_node::print(){
+	cout << "(new ";
+	m_id->print();
+	cout << ") ";
+}
+exp_new_list_node::exp_new_list_node(string id, exp_node *size){
+	m_id = new exp_id_node(id);
+	m_size = size;
+}
+void exp_new_list_node::print(){
+	cout << "(new ";
+	m_id->print();
+	cout << '[';
+	m_size->print();
+	cout << "]) ";
+}
+
 
 
 

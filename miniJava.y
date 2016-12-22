@@ -41,6 +41,7 @@ int yyerror(const char *s);
 %token <num> NUMBER
 %token <id> ID
 %token NEWLINE
+%token NEW
 %left IF
 %left ELSE
 %left WHILE
@@ -49,7 +50,7 @@ int yyerror(const char *s);
 %left AND
 %left OR
 %left NOT
-%left LESS MORE
+%left LESS MORE EQUAL
 %left PLUS MINUS
 %left TIMES DIVIDE
 %left LPAREN RPAREN
@@ -84,6 +85,7 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
     |   NOT exp { $$ = new exp_not_node($2); }
     |   exp LESS exp { $$ = new exp_operator_node("<", $1, $3); }
     |   exp MORE exp { $$ = new exp_operator_node(">", $1, $3); }
+    |   exp EQUAL exp { $$ = new exp_operator_node("==", $1, $3); }
     |   exp PLUS exp { $$ = new exp_operator_node("+", $1, $3); }
     |	exp MINUS exp { $$ = new exp_operator_node("-", $1, $3); }
 	|	exp TIMES exp { $$ = new exp_operator_node("*", $1, $3); }
@@ -91,6 +93,8 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
 	|	LPAREN exp RPAREN  { $$ = $2; }
     |   ID '[' exp ']' { $$ = new exp_at_node($1, $3); }
     |   ID '.' ID { $$ = new exp_point_node($1, $3); }
+    |   NEW ID LPAREN RPAREN { $$ = new exp_new_node($2); }
+    |   NEW ID '[' exp ']' { $$ = new exp_new_list_node($2, $4); }
     ;
     
 NEWLINES : NEWLINES NEWLINE 
