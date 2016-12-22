@@ -32,6 +32,7 @@ LETTER [a-zA-Z]
 }
 
 [ \t\f\r]	;		 // ignore white space 
+\/\/.* ; //ignore comment
 
 
 \n      { line_num++; return NEWLINE; }
@@ -46,7 +47,7 @@ LETTER [a-zA-Z]
 "!" { return NOT; }
 "="  { return EQUALS; }
 
-[\[\]\.] { return *yytext; }
+[\[\]\.\{\}] { return *yytext; }
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*()= \t\n\f\r] { yymore(); }

@@ -61,6 +61,7 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
 	|	exp DIVIDE exp { $$ = new exp_operator_node("/", $1, $3); }
 	|	LPAREN exp RPAREN  { $$ = $2; }
     |   ID '[' exp ']' { $$ = new exp_at_node($1, $3); }
+    |   ID '{' exp '}' { $$ = new exp_at_node($1, $3); }
     |   ID '.' ID { $$ = new exp_point_node($1, $3); }
     ;
     
