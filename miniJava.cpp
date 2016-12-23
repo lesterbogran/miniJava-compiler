@@ -137,10 +137,6 @@ void state_list_assign_node::print(){
 	m_exp->print();
 	cout << ") ";
 }
-
-
-
-
 pgm::pgm(vector<state_node *> *statelist){
 	m_statelist = statelist;
 }
