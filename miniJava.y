@@ -77,13 +77,17 @@ int yyerror(const char *s);
 program : methoddeclare { $$ = new pgm($1); root = $$; }
 ;
 
-methoddeclare : PUBLIC minitype ID LPAREN RPAREN LBRACE
-                       statelist
+methoddeclare : PUBLIC minitype ID 
+                       LPAREN statelist RPAREN 
+                       LBRACE statelist
                        RETURN exp ';' RBRACE 
-                       {{ $$ = new method_declare_node($3, $7, $9); }} 
+                       {{ $$ = new method_declare_node($3, $5, $8, $10); }} 
 ;
 
+
 vardeclare : minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
+    | ',' minitype ID {{ $$ = new var_declare_node($2, $3); }}
+    | minitype ID {{ $$ = new var_declare_node($1, $2); }}
 ;
 
 minitype : ID  {{ $$ = new type_node($1); }}

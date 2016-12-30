@@ -63,7 +63,7 @@ LETTER [a-zA-Z]
 "}" { column_num+=1;return RBRACE; }
 
 
-[\[\]\.;] { column_num+=1;return *yytext; }
+[\[\]\.;,] { column_num+=1;return *yytext; }
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*()= \t\n\f\r] { yymore(); }

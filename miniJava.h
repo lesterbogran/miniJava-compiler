@@ -185,9 +185,10 @@ public:
 class method_declare_node{
 public:
 	exp_id_node *m_id;
-	vector<state_node *> *m_statelist;
+	vector<state_node *> *m_statelist, *m_varlist;
 	exp_node *m_result;
-	method_declare_node(string id, vector<state_node *> *statelist, exp_node *result);
+	method_declare_node(string id, vector<state_node *> *varlist, 
+						vector<state_node *> *statelist, exp_node *result);
 	void print();
 	int eval(var_map *v_map);
 };

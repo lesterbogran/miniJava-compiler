@@ -376,14 +376,23 @@ int var_declare_node::eval(var_map *v_map){
 }
 
 
-method_declare_node::method_declare_node(string id, vector<state_node *> *statelist, exp_node *result){
+method_declare_node::method_declare_node(string id, 
+										 vector<state_node *> *varlist, 
+										 vector<state_node *> *statelist, 
+										 exp_node *result){
 	m_id = new exp_id_node(id);
+	m_varlist = varlist;
 	m_statelist = statelist;
 	m_result = result;
 }
 void method_declare_node::print(){
 	cout << "(MethodDeclare ";
 	m_id->print();
+	cout << "(Parameters";
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->print();
+	}
+	cout << ") ";
 	for(int i=0;i<m_statelist->size();++i){
 		cout << endl << "STATE" << i << ": ";
 		((*m_statelist)[i])->print();
