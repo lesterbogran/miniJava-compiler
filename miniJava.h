@@ -152,7 +152,7 @@ public:
 	int eval(var_map *v_map);
 };
 
-
+/*
 class pgm {
 public:
 	vector<state_node *> *m_statelist;
@@ -160,6 +160,7 @@ public:
 	void print();
 	int eval();
 };
+*/
 
 ///////// mini type /////////
 class type_node{
@@ -170,8 +171,33 @@ public:
 };
 class type_list_node : public type_node{
 public:
+	type_list_node(string id);
 	void print();
 };
-
+class var_declare_node{
+public:
+	type_node *m_type;
+	exp_id_node *m_id;
+	var_declare_node(type_node *type, string id);
+	void print();
+	int eval(var_map *v_map);
+};
+class method_declare_node{
+public:
+	exp_id_node *m_id;
+	vector<state_node *> *m_statelist;
+	exp_node *m_result;
+	method_declare_node(string id, vector<state_node *> *statelist, exp_node *result);
+	void print();
+	int eval(var_map *v_map);
+};
+	
+class pgm {
+public:
+	method_declare_node *m_m;
+	pgm(method_declare_node *m);
+	void print();
+	int eval();
+};
 
 extern pgm *root;

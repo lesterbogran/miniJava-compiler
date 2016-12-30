@@ -39,15 +39,19 @@ int yyerror(const char *s);
     vector<state_node *> *statelistnode;
     state_node *statenode;
     type_node *minitypenode;
+    var_declare_node *vardeclarenode;
+    method_declare_node *methoddeclarenode;
     pgm *prog;
 }
 
 %token <num> NUMBER
 %token <id> ID
 %token NEW
-%left IF
-%left ELSE
-%left WHILE
+%token PUBLIC
+%token RETURN
+%token IF
+%token ELSE
+%token WHILE
 %left PRINT
 %left ASSIGN
 %left AND
@@ -64,12 +68,24 @@ int yyerror(const char *s);
 %type <statelistnode> states
 %type <statenode> state
 %type <minitypenode> minitype
+%type <vardeclarenode> vardeclare
+%type <methoddeclarenode> methoddeclare
 %type <prog> program
 
 %%
-program : statelist { $$ = new pgm($1); root = $$; }
+///program : statelist { $$ = new pgm($1); root = $$; }
+program : methoddeclare { $$ = new pgm($1); root = $$; }
 ;
 
+methoddeclare : PUBLIC minitype ID LPAREN RPAREN LBRACE
+                       vardeclare
+                       statelist
+                       RETURN exp ';' RBRACE 
+                       {{ $$ = new method_declare_node($3, $8, $10); }} 
+;
+
+vardeclare : minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
+;
 
 minitype : ID  {{ $$ = new type_node($1); }}
     |   ID '[' ']' {{ $$ = new type_list_node($1); }}
@@ -117,7 +133,7 @@ int main(int argc, char *argv[]){
     yyparse();
     root->print();
     cout << endl;
-    cout << "eval!!!!!" << endl;
+    cout << "running!!!!!" << endl;
     root->eval();
     return 0;
 }

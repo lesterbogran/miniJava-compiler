@@ -353,13 +353,70 @@ void type_node::print(){
 	m_id->print();
 	cout << ") ";
 }
-
+type_list_node::type_list_node(string id): type_node(id){
+	m_id = new exp_id_node(id+"[]");
+}
 void type_list_node::print(){
 	cout << "(type ";
 	m_id->print();
 	cout << "[]) ";
 }
+var_declare_node::var_declare_node(type_node *type, string id){
+	m_id = new exp_id_node(id);
+	m_type = type;
+}
+void var_declare_node::print(){
+	cout << "(VarDeclare ";
+	m_type->print();
+	m_id->print();
+	cout << ") ";
+}
+int var_declare_node::eval(var_map *v_map){
+	v_map->set(m_id->m_id, 0);
+}
 
+
+method_declare_node::method_declare_node(string id, vector<state_node *> *statelist, exp_node *result){
+	m_id = new exp_id_node(id);
+	m_statelist = statelist;
+	m_result = result;
+}
+void method_declare_node::print(){
+	cout << "(MethodDeclare ";
+	m_id->print();
+	for(int i=0;i<m_statelist->size();++i){
+		cout << endl << "STATE" << i << ": ";
+		((*m_statelist)[i])->print();
+	}
+	cout << "(return ";
+	m_result->print();
+	cout << ")) ";
+	
+}
+
+int method_declare_node::eval(var_map *v_map){
+	int res = 0;
+	var_map LOCAL_VAR_MAP(v_map);
+	for(int i=0;i<m_statelist->size();++i){
+		((*m_statelist)[i])->eval(&LOCAL_VAR_MAP);
+	}
+	res = m_result->eval(&LOCAL_VAR_MAP);
+	cout << "RESULT: " << res << endl;
+	return res;
+}
+
+
+pgm::pgm(method_declare_node *m){
+	m_m = m;
+}
+void pgm::print(){
+	m_m->print();
+}
+int pgm::eval(){
+	m_m->eval(NULL);	
+}
+
+/*
 pgm::pgm(vector<state_node *> *statelist){
 	m_statelist = statelist;
 }
@@ -376,7 +433,7 @@ int pgm::eval(){
 		((*m_statelist)[i])->eval(&GLOBAL_VAR_MAP);
 	}
 	cout << endl;
-}
+}*/
 
 
 

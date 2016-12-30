@@ -24,6 +24,8 @@ LETTER [a-zA-Z]
 %x ERROR
 
 %%
+"return" { column_num+=6;return RETURN; }
+"public" { column_num+=6;return PUBLIC; }
 "if" { column_num+=2;return IF; }
 "else" { column_num+=4;return ELSE; }
 "while" { column_num+=5;return WHILE; }
