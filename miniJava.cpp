@@ -415,14 +415,23 @@ int method_declare_node::eval(var_map *v_map){
 }
 
 
-pgm::pgm(method_declare_node *m){
-	m_m = m;
+pgm::pgm(vector<method_declare_node *> *methodlist){
+	m_methodlist = methodlist;
 }
 void pgm::print(){
-	m_m->print();
+	cout << endl;
+	for(int i=0;i<m_methodlist->size();++i){
+		cout << "METHOD" << i << ": " << endl;
+		((*m_methodlist)[i])->print();
+	}
 }
 int pgm::eval(){
-	m_m->eval(NULL);	
+	int res;
+	for(int i=0;i<m_methodlist->size();++i){
+		cout << "METHOD" << i << ": " << endl;
+		((*m_methodlist)[i])->eval(NULL);
+	}
+	return 0;
 }
 
 /*

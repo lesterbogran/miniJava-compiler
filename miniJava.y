@@ -37,6 +37,7 @@ int yyerror(const char *s);
     char *id;
     exp_node *expnode;
     vector<state_node *> *statelistnode;
+    vector<method_declare_node *> *methodlistnode;
     state_node *statenode;
     type_node *minitypenode;
     var_declare_node *vardeclarenode;
@@ -64,6 +65,7 @@ int yyerror(const char *s);
 %left LBRACE RBRACE
 %nonassoc UMINUS
 %type <expnode> exp
+%type <methodlistnode> methodlist
 %type <statelistnode> statelist
 %type <statelistnode> states
 %type <statenode> state
@@ -74,8 +76,14 @@ int yyerror(const char *s);
 
 %%
 ///program : statelist { $$ = new pgm($1); root = $$; }
-program : methoddeclare { $$ = new pgm($1); root = $$; }
+program : methodlist { $$ = new pgm($1); root = $$; }
 ;
+
+
+methodlist : methodlist methoddeclare { $$ = $1; $1->push_back($2); }
+    |   { $$ = new vector<method_declare_node *>(); }
+    ;
+
 
 methoddeclare : PUBLIC minitype ID 
                        LPAREN statelist RPAREN 
