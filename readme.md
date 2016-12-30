@@ -46,6 +46,11 @@ public:
 	int get(string id, int *val);  /// will try to search upward, return -1 if not found, 0 otherwise
 };
 ```
+## 作用域的例子
+`sh gloabl_local_test.sh`
+第一个函数使用晒法计算了20以内素数的个数，第二个函数试图打印第一个函数使用的两个变量。其中第一个是本地变量，所以没有打印成功。而第二个是全局变量，所以打印成功了。
+
+
 
 # 难点
 写cpp的时候容易把node的class和数据类型的class弄混

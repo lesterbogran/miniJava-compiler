@@ -198,8 +198,10 @@ public:
 
 class pgm {
 public:
+	vector<state_node *> *m_varlist;
 	vector<method_declare_node *> *m_methodlist;
-	pgm(vector<method_declare_node *> *methodlist);
+	pgm(vector<state_node *> *varlist,
+		vector<method_declare_node *> *methodlist);
 	void print();
 	int eval();
 };

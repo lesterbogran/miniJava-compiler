@@ -70,7 +70,7 @@ void exp_id_node::print(){
 }
 int exp_id_node::eval(var_map *v_map){
 	if(v_map->get(m_id, &m_val)==-1)
-		cout << "Error: var not found!" << endl;
+		cout << "Error: var '" << m_id << "' not found!" << endl;
 	return m_val;
 }
 
@@ -415,21 +415,33 @@ int method_declare_node::eval(var_map *v_map){
 }
 
 
-pgm::pgm(vector<method_declare_node *> *methodlist){
+pgm::pgm(vector<state_node *> *varlist,
+		vector<method_declare_node *> *methodlist){
+	m_varlist = varlist;
 	m_methodlist = methodlist;
+	
 }
 void pgm::print(){
 	cout << endl;
+	cout << "(vardeclare ";
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->print();
+	}
+	cout << ") " << endl;
 	for(int i=0;i<m_methodlist->size();++i){
 		cout << "METHOD" << i << ": " << endl;
 		((*m_methodlist)[i])->print();
 	}
 }
 int pgm::eval(){
+	var_map GLOBAL_VAR_MAP;	
 	int res;
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->eval(&GLOBAL_VAR_MAP);
+	}
 	for(int i=0;i<m_methodlist->size();++i){
 		cout << "METHOD" << i << ": " << endl;
-		((*m_methodlist)[i])->eval(NULL);
+		((*m_methodlist)[i])->eval(&GLOBAL_VAR_MAP);
 	}
 	return 0;
 }
