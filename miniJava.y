@@ -117,6 +117,8 @@ int main(int argc, char *argv[]){
     yyparse();
     root->print();
     cout << endl;
+    cout << "eval!!!!!" << endl;
+    root->eval();
     return 0;
 }
 
