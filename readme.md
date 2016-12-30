@@ -11,8 +11,19 @@ c 深入学习
 # 除了编译器以外的用途
 
 # shift-reduce conflicts, and reduce-reduce
-典型的悬挂else不在miniJava的设计中
-运算符的优先级用left token 以及reduce-reduce conflicts有限满足先定义的规则(正如书上提到的)
+* 典型的悬挂else不在miniJava的设计中(它的语法要求每个if都有else), 
+  这避免了一个很常见的shift-reduce conflict， 但是在我的设计中，存在另外一个这种类型的conflict：
+  在函数参数的定义中，MiniJava的设计`"(" ( Type Identifier ( "," Type Identifier )* )? ")" `，
+  因为','比参数少一个，导致匹配写起来很不优雅，所以在我的设计中
+  ```
+  vardeclare : minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
+    | ',' minitype ID {{ $$ = new var_declare_node($2, $3); }}
+    | minitype ID {{ $$ = new var_declare_node($1, $2); }}
+  ```
+  同时接受这三种参数定义方法，其中第二和第三种虽然有冲突，但是按照Bison编译器对shift处理有限的原则，
+  刚好符合我们的要求，所以这里的冲突是完全安全的。算是利用了编译器这个特性使设计更加优雅了。
+
+* 运算符的优先级用left token 以及reduce-reduce conflicts有限满足先定义的规则(正如书上提到的)
 
 
 # 错误提示 (语法)
