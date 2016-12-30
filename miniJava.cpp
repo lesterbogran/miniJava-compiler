@@ -365,9 +365,7 @@ void pgm::print(){
 int pgm::eval(){
 	var_map GLOBAL_VAR_MAP;	
 	for(int i=0;i<m_statelist->size();++i){
-		cout << endl << "STATE" << i << ": ";
-		((*m_statelist)[i])->print();
-		cout << endl << "RESULT: " << ((*m_statelist)[i])->eval(&GLOBAL_VAR_MAP) << endl;
+		((*m_statelist)[i])->eval(&GLOBAL_VAR_MAP);
 	}
 	cout << endl;
 }

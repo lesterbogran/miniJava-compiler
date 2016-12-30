@@ -1,8 +1,9 @@
 set  -x
 make
-echo "a=new int[100];\na[0]=1;\na[1]=1;\ni=2;\nSystem.out.println(1);\nSystem.out.println(1);\nwhile(i<20){\n  a[i]=a[i-1]+a[i-2];\n  System.out.println(a[i]);\n  i=i+1;\n}\n" > test.java
+echo "MAX = 200;\nPRIMES = new int[MAX+1];\ni = 0;\nwhile(i<MAX+1){\n  PRIMES[i]=1;\n  i=i+1;\n}\nPRIMES[0] = 0;\nPRIMES[1] = 0;\ni=1;\nwhile(i<MAX+1){\n  if(PRIMES[i]==1){\n    j=i*2;\n    while(j<MAX+1){\n      PRIMES[j]=0;\n      j=j+i;\n    }\n  }else{c=1;}\n  i = i + 1;\n}\ni=0;\nwhile(i<MAX+1){\n  if(PRIMES[i]==1){\n    System.out.println(i);\n  }else{c=1;}\n  i=i+1;\n}\n" > test.java
 cat -n test.java
 cat test.java | ./miniJava
 rm test.java
+
 
 
