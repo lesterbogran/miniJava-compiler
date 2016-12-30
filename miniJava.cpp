@@ -98,7 +98,6 @@ void state_if_node::print(){
 	cout << endl;
 	for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
 	cout << "ELSE: ";
-	
 	///PRINT_INDENT++; ///ELSE is actually part of IF
 	for(int i=0;i<m_iffalse->size();++i){
 		cout << endl;
