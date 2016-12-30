@@ -16,6 +16,8 @@ pgm *root;
 // tracking
 int line_num = 1;
 int column_num = 1;
+extern char *yytext;
+
 
 // stuff from flex that bison needs to know about:
 extern "C" int yylex();
@@ -119,7 +121,7 @@ int main(int argc, char *argv[]){
 }
 
 int yyerror(const char *s) {
-	cout << "EEK, parse error!  Message: " << s << " Line: " << line_num  << " Column: " << column_num << endl;
+	cout << "EEK, parse error!  Message: " << s << " Line: " << line_num  << " Column: " << column_num << " Current token: " << yytext << endl;
 	// might as well halt now:
 	exit(-1);
 }

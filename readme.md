@@ -14,6 +14,14 @@ c 深入学习
 典型的悬挂else不在miniJava的设计中
 运算符的优先级用left token 以及reduce-reduce conflicts有限满足先定义的规则(正如书上提到的)
 
+
+# 错误提示 (语法)
+* 在flex文件中，使用line_num和column_num来记录推导过程。
+* 在bison文件中，使用yyerror函数报错，输出错误信息，并使用yytext获取当前处理中的token
+
+
+# 错误提示 (语义)
+
 # 难点
 写cpp的时候容易把node的class和数据类型的class弄混
 Statement ::= "{" (Statement)* "}" 无法直接在Bison中实现，因为对应到C代码时无法自动为(...)*指定数据类型3
