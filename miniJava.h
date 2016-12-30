@@ -174,7 +174,7 @@ public:
 	type_list_node(string id);
 	void print();
 };
-class var_declare_node{
+class var_declare_node : public state_node{
 public:
 	type_node *m_type;
 	exp_id_node *m_id;

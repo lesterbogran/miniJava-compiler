@@ -78,10 +78,9 @@ program : methoddeclare { $$ = new pgm($1); root = $$; }
 ;
 
 methoddeclare : PUBLIC minitype ID LPAREN RPAREN LBRACE
-                       vardeclare
                        statelist
                        RETURN exp ';' RBRACE 
-                       {{ $$ = new method_declare_node($3, $8, $10); }} 
+                       {{ $$ = new method_declare_node($3, $7, $9); }} 
 ;
 
 vardeclare : minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
@@ -99,7 +98,8 @@ statelist : statelist state { $$ = $1; $1->push_back($2); }
     |   { $$ = new vector<state_node *>(); }
     ;
 
-state : IF LPAREN exp RPAREN states ELSE states { $$ = new state_if_node($3, $5, $7); }
+state : vardeclare { $$ = $1; }
+    |   IF LPAREN exp RPAREN states ELSE states { $$ = new state_if_node($3, $5, $7); }
     |   WHILE LPAREN exp RPAREN states { $$ = new state_while_node($3, $5); }
     |   PRINT LPAREN exp RPAREN ';' { $$ = new state_print_node($3); }
     |   ID ASSIGN exp ';' { $$ = new state_assign_node($1, $3); }
