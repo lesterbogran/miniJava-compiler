@@ -15,6 +15,7 @@ pgm *root;
 
 // tracking
 int line_num = 1;
+int column_num = 1;
 
 // stuff from flex that bison needs to know about:
 extern "C" int yylex();
@@ -58,6 +59,7 @@ int yyerror(const char *s);
 %nonassoc UMINUS
 %type <expnode> exp
 %type <statelistnode> statelist
+%type <statelistnode> states
 %type <statenode> state
 %type <minitypenode> minitype
 %type <prog> program
@@ -72,13 +74,15 @@ minitype : ID  {{ $$ = new type_node($1); }}
     ;
 
 
+states : LBRACE statelist RBRACE { $$ = $2; }
+;
+
 statelist : statelist state { $$ = $1; $1->push_back($2); }
     |   { $$ = new vector<state_node *>(); }
     ;
 
-state : LBRACE state RBRACE { $$ = $2; }
-    |   IF LPAREN exp RPAREN state ELSE state { $$ = new state_if_node($3, $5, $7); }
-    |   WHILE LPAREN exp RPAREN state { $$ = new state_while_node($3, $5); }
+state : IF LPAREN exp RPAREN state ELSE state { $$ = new state_if_node($3, $5, $7); }
+    |   WHILE LPAREN exp RPAREN states { $$ = new state_while_node($3, $5); }
     |   PRINT LPAREN exp RPAREN ';' { $$ = new state_print_node($3); }
     |   ID ASSIGN exp ';' { $$ = new state_assign_node($1, $3); }
     |   ID '[' exp ']' ASSIGN exp ';' { $$ = new state_list_assign_node($1, $3, $6); }
@@ -115,7 +119,7 @@ int main(int argc, char *argv[]){
 }
 
 int yyerror(const char *s) {
-	cout << "EEK, parse error!  Message: " << s << "Line: " << line_num << endl;
+	cout << "EEK, parse error!  Message: " << s << " Line: " << line_num  << " Column: " << column_num << endl;
 	// might as well halt now:
 	exit(-1);
 }

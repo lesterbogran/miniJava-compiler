@@ -17,12 +17,14 @@ class exp_num_node : public exp_node{
 public:
 	exp_num_node(int num);
 	void print();
+	int eval();
 };
 class exp_id_node : public exp_node{
 public:
 	string m_id;
 	exp_id_node(string id);
 	void print();
+	int eval();
 };
 class exp_operator_node : public exp_node {
 public:
@@ -30,7 +32,8 @@ public:
 	exp_node *m_right;
 	string m_operation; // || && < + - * /
 	exp_operator_node(string opt, exp_node* left, exp_node* right);
-	void print();	
+	void print();
+	int eval();	
 };
 class exp_at_node : public exp_node {
 public:
@@ -38,6 +41,7 @@ public:
 	exp_node *m_at;
 	exp_at_node(string id, exp_node* at);
 	void print();
+	int eval();
 };
 // include exp_length_node
 class exp_point_node : public exp_node{
@@ -46,18 +50,21 @@ public:
 	exp_id_node *m_id2;
 	exp_point_node(string id1, string id2);
 	void print();
+	int eval();
 };
 class exp_not_node : public exp_node{
 public:
 	exp_node *m_exp;
 	exp_not_node(exp_node* exp);
 	void print();
+	int eval();
 };
 class exp_new_node : public exp_node{
 public:
 	exp_id_node *m_id;
 	exp_new_node(string id);
 	void print();
+	int eval();
 };
 class exp_new_list_node : public exp_node{
 public:
@@ -65,6 +72,7 @@ public:
 	exp_node *m_size;
 	exp_new_list_node(string id, exp_node *size);
 	void print();
+	int eval();
 };
 
 ////////// exp end /////////////
@@ -84,20 +92,24 @@ public:
 	state_if_node(exp_node *cond, state_node *iftrue, 
 				  state_node *iffalse);
 	void print();
+	int eval();
 };
 
 class state_while_node : public state_node{
 public:
 	exp_node *m_cond;
-	state_node *m_state;
-	state_while_node(exp_node *cond, state_node *state);
+	///state_node *m_state;
+	vector<state_node *> *m_states;
+	state_while_node(exp_node *cond, vector<state_node *> *states);
 	void print();
+	int eval();
 };
 class state_print_node : public state_node{
 public:
 	exp_node *m_exp;
 	state_print_node(exp_node *exp);
 	void print();
+	int eval();
 };
 
 class state_assign_node : public state_node{
@@ -106,6 +118,7 @@ public:
 	exp_node *m_exp;
 	state_assign_node(string id, exp_node* exp);
 	void print();
+	int eval();
 };
 class state_list_assign_node : public state_node{
 public:
@@ -115,6 +128,7 @@ public:
 	state_list_assign_node(string id, exp_node *where,
 						   exp_node *exp);
 	void print();
+	int eval();
 };
 
 
@@ -123,6 +137,7 @@ public:
 	vector<state_node *> *m_statelist;
 	pgm(vector<state_node *> *statelist);
 	void print();
+	int eval();
 };
 
 ///////// mini type /////////

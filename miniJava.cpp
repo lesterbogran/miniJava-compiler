@@ -9,6 +9,9 @@
 
 using namespace std;
 
+int PRINT_INDENT = 0;
+int INDENT_SIZE = 2;
+
 void exp_node::print(){
 	cout << " ";	
 }
@@ -88,15 +91,24 @@ void state_if_node::print(){
 	cout << ") ";
 }
 
-state_while_node::state_while_node(exp_node *cond, state_node *state){
+state_while_node::state_while_node(exp_node *cond, vector<state_node *> *states){
 	m_cond = cond;
-	m_state = state;
+	m_states = states;
 }
 
 void state_while_node::print(){
 	cout << "(while ";
 	m_cond->print();
-	m_state->print();
+	PRINT_INDENT++;
+	for(int i=0;i<m_states->size();++i){
+		cout << endl;
+		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		cout << "STATE" << i << ": ";
+		((*m_states)[i])->print();
+	}	
+	PRINT_INDENT--;
+	cout << endl;
+	for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
 	cout << ") ";
 }
 
@@ -142,10 +154,10 @@ pgm::pgm(vector<state_node *> *statelist){
 }
 void pgm::print(){
 	for(int i=0;i<m_statelist->size();++i){
-		cout << "STATE" << i << ": ";
+		cout << endl << "STATE" << i << ": ";
 		((*m_statelist)[i])->print();
-		cout << endl;
 	}
+	cout << endl;
 }
 
 exp_new_node::exp_new_node(string id){

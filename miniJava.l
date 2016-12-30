@@ -14,6 +14,7 @@ using namespace std;
 
 
 extern int line_num;
+extern int column_num;
 
 %}
 
@@ -23,42 +24,44 @@ LETTER [a-zA-Z]
 %x ERROR
 
 %%
-"if" { return IF; }
-"else" { return ELSE; }
-"while" { return WHILE; }
-"System.out.println" { return PRINT; }
-"new" { return NEW; }
+"if" { column_num+=2;return IF; }
+"else" { column_num+=4;return ELSE; }
+"while" { column_num+=5;return WHILE; }
+"System.out.println" { column_num+=18;return PRINT; }
+"new" { column_num+=3;return NEW; }
 {DIGIT}+ {
+    column_num+=strlen(yytext);
 	yylval.num = atof(yytext); return NUMBER;
 }
 
 {LETTER}[0-9a-zA-Z]* {
-        yylval.id = strdup(yytext); return ID;
+    column_num+=strlen(yytext);
+	yylval.id = strdup(yytext); return ID;
 }
 
-[ \t\f\r]	;		 // ignore white space 
-\/\/.* ; //ignore comment
+[ \t\f\r]	;		 { column_num+=1; }// ignore white space 
+\/\/.* ; { column_num+=1; }//ignore comment
 
 
-\n      { line_num++; }
-"-"	{ return MINUS;  }
-"+"	{ return PLUS;   }
-"*"	{ return TIMES;  }
-"/"	{ return DIVIDE; }
-"("	{ return LPAREN; }
-")"	{ return RPAREN; }
-"&&" { return AND; }
-"||" { return OR; }
-"!" { return NOT; }
-"<" { return LESS; }
-">" { return MORE; }
-"==" { return EQUAL; }
-"="  { return ASSIGN; }
-"{" { return LBRACE; }
-"}" { return RBRACE; }
+\n      { line_num++;column_num=1; }
+"-"	{ column_num+=1;return MINUS;  }
+"+"	{ column_num+=1;return PLUS;   }
+"*"	{ column_num+=1;return TIMES;  }
+"/"	{ column_num+=1;return DIVIDE; }
+"("	{ column_num+=1;return LPAREN; }
+")"	{ column_num+=1;return RPAREN; }
+"&&" { column_num+=2;return AND; }
+"||" { column_num+=2;return OR; }
+"!" { column_num+=1;return NOT; }
+"<" { column_num+=1;return LESS; }
+">" { column_num+=1;return MORE; }
+"==" { column_num+=2;return EQUAL; }
+"="  { column_num+=1;return ASSIGN; }
+"{" { column_num+=1;return LBRACE; }
+"}" { column_num+=1;return RBRACE; }
 
 
-[\[\]\.;] { return *yytext; }
+[\[\]\.;] { column_num+=1;return *yytext; }
 
 . { BEGIN(ERROR); yymore(); }
 <ERROR>[^{DIGIT}{LETTER}+\-/*()= \t\n\f\r] { yymore(); }

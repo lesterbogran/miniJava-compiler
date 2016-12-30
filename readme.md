@@ -16,7 +16,8 @@ c 深入学习
 
 # 难点
 写cpp的时候容易把node的class和数据类型的class弄混
-
+Statement ::= "{" (Statement)* "}" 无法直接在Bison中实现，因为对应到C代码时无法自动为(...)*指定数据类型3
+由于C语言的灵活性，从Github上看，Bison的定义文件有很多种写法，但都非常不优雅(截图)，我试图采用OO的方法把Parser写的更加清晰
 
 # reference
 
