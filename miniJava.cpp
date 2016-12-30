@@ -168,8 +168,21 @@ void exp_new_list_node::print(){
 	cout << "]) ";
 }
 
+type_node::type_node(string id){
+	m_id = new exp_id_node(id);
+}
 
+void type_node::print(){
+	cout << "(type ";
+	m_id->print();
+	cout << ") ";
+}
 
+void type_list_node::print(){
+	cout << "(type ";
+	m_id->print();
+	cout << "[]) ";
+}
 
 
 

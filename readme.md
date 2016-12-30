@@ -10,6 +10,10 @@ c 深入学习
 
 # 除了编译器以外的用途
 
+# shift-reduce conflicts, and reduce-reduce
+典型的悬挂else不在miniJava的设计中
+运算符的优先级用left token 以及reduce-reduce conflicts有限满足先定义的规则(正如书上提到的)
+
 # 难点
 写cpp的时候容易把node的class和数据类型的class弄混
 

@@ -40,7 +40,7 @@ LETTER [a-zA-Z]
 \/\/.* ; //ignore comment
 
 
-\n      { line_num++; return NEWLINE; }
+\n      { line_num++; }
 "-"	{ return MINUS;  }
 "+"	{ return PLUS;   }
 "*"	{ return TIMES;  }

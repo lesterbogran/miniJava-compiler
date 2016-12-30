@@ -125,5 +125,17 @@ public:
 	void print();
 };
 
+///////// mini type /////////
+class type_node{
+public:
+	exp_id_node *m_id;
+	type_node(string id);
+	void print();
+};
+class type_list_node : public type_node{
+public:
+	void print();
+};
+
 
 extern pgm *root;

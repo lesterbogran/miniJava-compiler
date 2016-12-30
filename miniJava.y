@@ -35,12 +35,12 @@ int yyerror(const char *s);
     exp_node *expnode;
     vector<state_node *> *statelistnode;
     state_node *statenode;
+    type_node *minitypenode;
     pgm *prog;
 }
 
 %token <num> NUMBER
 %token <id> ID
-%token NEWLINE
 %token NEW
 %left IF
 %left ELSE
@@ -59,14 +59,20 @@ int yyerror(const char *s);
 %type <expnode> exp
 %type <statelistnode> statelist
 %type <statenode> state
+%type <minitypenode> minitype
 %type <prog> program
 
 %%
 program : statelist { $$ = new pgm($1); root = $$; }
 ;
 
-statelist : statelist NEWLINES { $$ = $1; }
-    |   statelist state NEWLINES { $$ = $1; $1->push_back($2); }
+
+minitype : ID  {{ $$ = new type_node($1); }}
+    |   ID '[' ']' {{ $$ = new type_list_node($1); }}
+    ;
+
+
+statelist : statelist state { $$ = $1; $1->push_back($2); }
     |   { $$ = new vector<state_node *>(); }
     ;
 
@@ -76,6 +82,7 @@ state : LBRACE state RBRACE { $$ = $2; }
     |   PRINT LPAREN exp RPAREN ';' { $$ = new state_print_node($3); }
     |   ID ASSIGN exp ';' { $$ = new state_assign_node($1, $3); }
     |   ID '[' exp ']' ASSIGN exp ';' { $$ = new state_list_assign_node($1, $3, $6); }
+    |   ';' { ; }
     ;
     
 exp :   NUMBER { $$ = new exp_num_node($1); }
@@ -97,9 +104,6 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
     |   NEW ID '[' exp ']' { $$ = new exp_new_list_node($2, $4); }
     ;
     
-NEWLINES : NEWLINES NEWLINE 
-         | NEWLINE
-         ;
 
 %%
 int main(int argc, char *argv[]){
