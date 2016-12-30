@@ -21,6 +21,20 @@ c 深入学习
 
 
 # 错误提示 (语义)
+## 变量字典
+如下的设计，可以方便的控制变量的作用域，在调用变量时，先在本地寻找，找不到时逐级访问上级字典.
+```
+class var_map{
+private:
+	var_map *m_higher_map;
+	map<string, int> m_map;
+public:
+	var_map(var_map *higher_map = NULL);
+	void declare(string id, int val=0);
+	void set(string id, int val=0); /// will try to search upward
+	int get(string id, int *val);  /// will try to search upward, return -1 if not found, 0 otherwise
+};
+```
 
 # 难点
 写cpp的时候容易把node的class和数据类型的class弄混
