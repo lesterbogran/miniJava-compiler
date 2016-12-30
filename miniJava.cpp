@@ -307,6 +307,14 @@ int state_list_assign_node::eval(var_map *v_map){
 	return val;
 }
 
+void state_nop_node::print(){
+	;
+}
+
+int state_nop_node::eval(var_map *v_map){
+	;
+}
+
 
 exp_new_node::exp_new_node(string id){
 	m_id = new exp_id_node(id);

@@ -88,7 +88,7 @@ state : IF LPAREN exp RPAREN states ELSE states { $$ = new state_if_node($3, $5,
     |   PRINT LPAREN exp RPAREN ';' { $$ = new state_print_node($3); }
     |   ID ASSIGN exp ';' { $$ = new state_assign_node($1, $3); }
     |   ID '[' exp ']' ASSIGN exp ';' { $$ = new state_list_assign_node($1, $3, $6); }
-    |   ';' { ; }
+    |   ';' { $$ = new state_nop_node(); }
     ;
     
 exp :   NUMBER { $$ = new exp_num_node($1); }

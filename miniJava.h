@@ -146,6 +146,11 @@ public:
 	void print();
 	int eval(var_map *v_map);
 };
+class state_nop_node : public state_node{
+public:
+	void print();
+	int eval(var_map *v_map);
+};
 
 
 class pgm {
