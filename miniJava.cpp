@@ -76,8 +76,8 @@ void state_node::print(){
 	cout << " ";
 }
 
-state_if_node::state_if_node(exp_node *cond, state_node *iftrue, 
-				  state_node *iffalse){
+state_if_node::state_if_node(exp_node *cond, vector<state_node *> *iftrue, 
+				  vector<state_node *> *iffalse){
 	m_cond = cond;
 	m_iftrue = iftrue;
 	m_iffalse = iffalse;
@@ -86,9 +86,30 @@ state_if_node::state_if_node(exp_node *cond, state_node *iftrue,
 void state_if_node::print(){
 	cout << "(if ";
 	m_cond->print();
-	m_iftrue->print();
-	m_iffalse->print();
-	cout << ") ";
+	
+	PRINT_INDENT++;
+	for(int i=0;i<m_iftrue->size();++i){
+		cout << endl;
+		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		cout << "STATE" << i << ": ";
+		((*m_iftrue)[i])->print();
+	}
+	///PRINT_INDENT--; ///ELSE is actually part of IF
+	cout << endl;
+	for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+	cout << "ELSE: ";
+	
+	///PRINT_INDENT++; ///ELSE is actually part of IF
+	for(int i=0;i<m_iffalse->size();++i){
+		cout << endl;
+		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		cout << "STATE" << i << ": ";
+		((*m_iffalse)[i])->print();
+	}
+	PRINT_INDENT--;
+	cout << endl;
+	for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+	cout << ")";
 }
 
 state_while_node::state_while_node(exp_node *cond, vector<state_node *> *states){

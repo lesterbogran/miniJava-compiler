@@ -87,10 +87,10 @@ public:
 class state_if_node : public state_node{
 public:
 	exp_node *m_cond;
-	state_node *m_iftrue;
-	state_node *m_iffalse;
-	state_if_node(exp_node *cond, state_node *iftrue, 
-				  state_node *iffalse);
+	vector<state_node *> *m_iftrue;
+	vector<state_node *> *m_iffalse;
+	state_if_node(exp_node *cond, vector<state_node *> *iftrue, 
+				  vector<state_node *> *iffalse);
 	void print();
 	int eval();
 };
@@ -98,7 +98,6 @@ public:
 class state_while_node : public state_node{
 public:
 	exp_node *m_cond;
-	///state_node *m_state;
 	vector<state_node *> *m_states;
 	state_while_node(exp_node *cond, vector<state_node *> *states);
 	void print();
