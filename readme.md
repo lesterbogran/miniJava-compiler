@@ -36,7 +36,7 @@
 
 # 开发中的各种坑
 
-## shift-reduce conflicts, and reduce-reduce
+## shift-reduce and reduce-reduce conflicts
 * 典型的悬挂else不在miniJava的设计中(它的语法要求每个if都有else), 
   这避免了一个很常见的shift-reduce conflict， 但是在我的设计中，存在另外一个这种类型的conflict：
   在函数参数的定义中，MiniJava的设计`"(" ( Type Identifier ( "," Type Identifier )* )? ")" `，
@@ -75,7 +75,7 @@ public:
 ```
 ## 作用域的例子
 `sh gloabl_local_test.sh`
-第一个函数使用晒法计算了20以内素数的个数，第二个函数试图打印第一个函数使用的两个变量。其中第一个是本地变量，所以没有打印成功。而第二个是全局变量，所以打印成功了。
+第一个函数使用筛法计算了20以内素数的个数，第二个函数试图打印第一个函数使用的两个变量。其中第一个是本地变量，所以没有打印成功。而第二个是全局变量，所以打印成功了。
 
 
 
@@ -99,5 +99,4 @@ Statement ::= "{" (Statement)* "}" 无法直接在Bison中实现，因为对应�
 * [Building Abstract Syntax Trees ](http://web.eecs.utk.edu/~bvz/teaching/cs461Sp11/notes/parse_tree/)
 
 # author
-
 me@qzane.com
