@@ -9,6 +9,8 @@
 
 using namespace std;
 
+int RUNNING_TYPE = 0;
+
 string int_to_string(int val){
 	string res = "";
 	for(;val>0;val/=10)
@@ -187,17 +189,23 @@ void state_if_node::print(){
 	for(int i=0;i<m_iftrue->size();++i){
 		cout << endl;
 		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		
+		if(RUNNING_TYPE!=2)
 		cout << "STATE" << i << ": ";
 		((*m_iftrue)[i])->print();
 	}
 	///PRINT_INDENT--; ///ELSE is actually part of IF
 	cout << endl;
 	for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+	
+	if(RUNNING_TYPE!=2)
 	cout << "ELSE: ";
 	///PRINT_INDENT++; ///ELSE is actually part of IF
 	for(int i=0;i<m_iffalse->size();++i){
 		cout << endl;
 		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		
+		if(RUNNING_TYPE!=2)
 		cout << "STATE" << i << ": ";
 		((*m_iffalse)[i])->print();
 	}
@@ -231,6 +239,8 @@ void state_while_node::print(){
 	for(int i=0;i<m_states->size();++i){
 		cout << endl;
 		for(int j=0;j<PRINT_INDENT*INDENT_SIZE;++j)cout << ' ';
+		
+		if(RUNNING_TYPE!=2)
 		cout << "STATE" << i << ": ";
 		((*m_states)[i])->print();
 	}	
@@ -405,7 +415,8 @@ void method_declare_node::print(){
 		((*m_varlist)[i])->print();
 	}
 	cout << ") ";
-	for(int i=0;i<m_statelist->size();++i){
+	for(int i=0;i<m_statelist->size();++i){		
+		if(RUNNING_TYPE!=2)
 		cout << endl << "STATE" << i << ": ";
 		((*m_statelist)[i])->print();
 	}
@@ -427,6 +438,7 @@ int method_declare_node::eval(var_map *v_map){
 		((*m_statelist)[i])->eval(&LOCAL_VAR_MAP);
 	}
 	res = m_result->eval(&LOCAL_VAR_MAP);
+	if(RUNNING_TYPE!=2)
 	cout << "RESULT: " << res << endl;
 	return res;
 }

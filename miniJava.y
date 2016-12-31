@@ -17,7 +17,7 @@ pgm *root;
 int line_num = 1;
 int column_num = 1;
 extern char *yytext;
-
+extern int RUNNING_TYPE;
 
 // stuff from flex that bison needs to know about:
 extern "C" int yylex();
@@ -192,13 +192,43 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
     
 
 %%
+void help(int argc, char *argv[]){
+    cout << "Usage: " << argv[0] << " -r x.java" << endl;
+    cout << "( run x.java )" << endl;
+    cout << "Or: " << argv[0] << " -p x.java" << endl;
+    cout << "( print human-readable AST of x.java )" << endl;
+    cout << "Or: " << argv[0] << " -t x.java" << endl;
+    cout << "( print AST of x.java )" << endl;
+    cout << "Or: " << argv[0] << " -h" << endl;
+    cout << "( show this help message )" << endl;
+    
+}
 int main(int argc, char *argv[]){
 	///cout << "Under Constrction" << endl;
-    yyparse();
+    RUNNING_TYPE=0;
+    if(argc>1){
+        if(argv[1][1]=='t')RUNNING_TYPE=2;
+        if(argv[1][1]=='p')RUNNING_TYPE=1;
+        if(argv[1][1]=='r')RUNNING_TYPE=0;
+        if(argv[1][1]=='h'){
+            help(argc, argv);
+            return 0;
+        }
+        FILE *myfile = fopen(argv[2], "r");
+        yyin = myfile;
+    }else{
+        help(argc, argv);return 0;
+    }
+    ///yyparse();
+    do {
+		yyparse();
+	} while (!feof(yyin));
     root->print();
     cout << endl;
-    cout << "running!!!!!" << endl;
-    root->eval();
+    if(RUNNING_TYPE==0){
+        cout << "running!!!!!" << endl;
+        root->eval();
+    }
     return 0;
 }
 
