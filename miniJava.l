@@ -25,7 +25,7 @@ LETTER [a-zA-Z_]
 
 %%
 
-
+"extends" { column_num+=7;return EXTENDS; }
 "true" { column_num+=4;return TRUE; }
 "false" { column_num+=5;return FALSE; }
 "this" { column_num+=4;return THIS; }

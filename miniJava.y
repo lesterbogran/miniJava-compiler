@@ -38,6 +38,7 @@ int yyerror(const char *s);
     exp_node *expnode;
     state_node *statenode;
     vector<state_node *> *statelistnode;
+    vector<exp_node *> *explistnode;
     type_node *minitypenode;
     var_declare_node *vardeclarenode;
     method_declare_node *methoddeclarenode;
@@ -57,6 +58,7 @@ int yyerror(const char *s);
 %token VOID
 %token STATIC
 %token CLASS
+%token EXTENDS
 %token PUBLIC
 %token RETURN
 %token IF
@@ -78,6 +80,7 @@ int yyerror(const char *s);
 %type <statelistnode> vardeclares
 %type <statelistnode> statelist
 %type <statelistnode> states
+%type <explistnode> explist
 %type <statenode> state
 %type <minitypenode> minitype
 %type <vardeclarenode> vardeclare
@@ -98,6 +101,7 @@ classlist : classlist classdeclare { $$ = $1; $1->push_back($2); }
     ;
 
 classdeclare : CLASS ID LBRACE vardeclares methodlist RBRACE { $$ = new class_declare_node($2, $4, $5); }
+    |  CLASS ID EXTENDS ID LBRACE vardeclares methodlist RBRACE { $$ = new class_declare_node($2, $6, $7); }
 ;
 
 
@@ -157,6 +161,11 @@ state : vardeclare { $$ = $1; }
     |   ';' { $$ = new state_nop_node(); }
     ;
     
+explist: explist ',' exp { $$ = $1; $1->push_back($3); }
+    |  exp { $$ = new vector<exp_node *>(); $$->push_back($1); }
+    | { $$ = new vector<exp_node *>(); }
+    ;
+    
 exp :   NUMBER { $$ = new exp_num_node($1); }
     |   ID { $$ = new exp_id_node($1); }
     |   exp AND exp { $$ = new exp_operator_node("&&", $1, $3); }
@@ -169,16 +178,16 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
     |	exp MINUS exp { $$ = new exp_operator_node("-", $1, $3); }
 	|	exp TIMES exp { $$ = new exp_operator_node("*", $1, $3); }
 	|	exp DIVIDE exp { $$ = new exp_operator_node("/", $1, $3); }
-	|	LPAREN exp RPAREN  { $$ = $2; }
     |   ID '[' exp ']' { $$ = new exp_at_node($1, $3); }
     |   TRUE { $$ = new exp_num_node(1); }
     |   FALSE { $$ = new exp_num_node(0); }
     |   THIS {  $$ = new exp_id_node("this"); }
     |   exp '.' LENGTH { $$ = new exp_length_node($1); }
-    |   exp '.' ID LPAREN exp RPAREN { $$ = new exp_num_node(0); }
-    |   ID '.' ID { $$ = new exp_point_node($1, $3); }
+    |   exp '.' ID LPAREN explist RPAREN { $$ = new exp_num_node(0); }
+    |   exp '.' ID LPAREN RPAREN { $$ = new exp_num_node(1); }
     |   NEW ID LPAREN RPAREN { $$ = new exp_new_node($2); }
     |   NEW ID '[' exp ']' { $$ = new exp_new_list_node($2, $4); }
+	|	LPAREN exp RPAREN  { $$ = $2; }
     ;
     
 

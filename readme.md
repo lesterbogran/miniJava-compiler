@@ -57,6 +57,9 @@ public:
 Statement ::= "{" (Statement)* "}" 无法直接在Bison中实现，因为对应到C代码时无法自动为(...)*指定数据类型3
 由于C语言的灵活性，从Github上看，Bison的定义文件有很多种写法，但都非常不优雅(截图)，我试图采用OO的方法把Parser写的更加清晰
 
+# 未实现功能
+* extends
+
 # reference
 
 * [The MiniJava Project](http://www.cambridge.org/us/features/052182060X/)
