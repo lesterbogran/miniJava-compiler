@@ -406,6 +406,11 @@ void method_declare_node::print(){
 int method_declare_node::eval(var_map *v_map){
 	int res = 0;
 	var_map LOCAL_VAR_MAP(v_map);
+	
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->eval(&LOCAL_VAR_MAP);
+	}
+	
 	for(int i=0;i<m_statelist->size();++i){
 		((*m_statelist)[i])->eval(&LOCAL_VAR_MAP);
 	}
@@ -414,7 +419,38 @@ int method_declare_node::eval(var_map *v_map){
 	return res;
 }
 
+class_declare_node::class_declare_node(string id, vector<state_node *> *varlist,
+					   vector<method_declare_node *> *methodlist){
+	m_id = new exp_id_node(id);
+	m_varlist = varlist;
+	m_methodlist = methodlist;
+}
+void class_declare_node::print(){
+	cout << "(ClassDeclare ";
+	m_id->print();
+	cout << "(Parameters";
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->print();
+	}
+	cout << ") ";
+	for(int i=0;i<m_methodlist->size();++i){
+		((*m_methodlist)[i])->print();
+	}
+	cout << ") ";
+}
+int class_declare_node::eval(var_map *v_map){
+	int res = 0;
+	var_map LOCAL_VAR_MAP(v_map);
+	for(int i=0;i<m_varlist->size();++i){
+		((*m_varlist)[i])->eval(&LOCAL_VAR_MAP);
+	}
+	for(int i=0;i<m_methodlist->size();++i){
+		((*m_methodlist)[i])->eval(&LOCAL_VAR_MAP);
+	}
+	return 0;
+}
 
+/*
 pgm::pgm(vector<state_node *> *varlist,
 		vector<method_declare_node *> *methodlist){
 	m_varlist = varlist;
@@ -445,25 +481,25 @@ int pgm::eval(){
 	}
 	return 0;
 }
+*/
 
-/*
-pgm::pgm(vector<state_node *> *statelist){
-	m_statelist = statelist;
+
+pgm::pgm(vector<class_declare_node *> *classlist){
+	m_classlist = classlist;
 }
 void pgm::print(){	
-	for(int i=0;i<m_statelist->size();++i){
-		cout << endl << "STATE" << i << ": ";
-		((*m_statelist)[i])->print();
+	for(int i=0;i<m_classlist->size();++i){
+		((*m_classlist)[i])->print();
 	}
 	cout << endl;
 }
 int pgm::eval(){
 	var_map GLOBAL_VAR_MAP;	
-	for(int i=0;i<m_statelist->size();++i){
-		((*m_statelist)[i])->eval(&GLOBAL_VAR_MAP);
+	for(int i=0;i<m_classlist->size();++i){
+		((*m_classlist)[i])->eval(&GLOBAL_VAR_MAP);
 	}
 	cout << endl;
-}*/
+}
 
 
 

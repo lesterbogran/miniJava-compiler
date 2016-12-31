@@ -24,6 +24,10 @@ LETTER [a-zA-Z]
 %x ERROR
 
 %%
+
+"void" { column_num+=4;return VOID; }
+"static" { column_num+=6;return STATIC; }
+"class" { column_num+=5;return CLASS; }
 "return" { column_num+=6;return RETURN; }
 "public" { column_num+=6;return PUBLIC; }
 "if" { column_num+=2;return IF; }

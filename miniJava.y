@@ -36,18 +36,23 @@ int yyerror(const char *s);
     int num;
     char *id;
     exp_node *expnode;
-    vector<state_node *> *statelistnode;
-    vector<method_declare_node *> *methodlistnode;
     state_node *statenode;
+    vector<state_node *> *statelistnode;
     type_node *minitypenode;
     var_declare_node *vardeclarenode;
     method_declare_node *methoddeclarenode;
+    vector<method_declare_node *> *methodlistnode;
+    class_declare_node *classdeclarenode;
+    vector<class_declare_node *>*classlistnode;
     pgm *prog;
 }
 
 %token <num> NUMBER
 %token <id> ID
 %token NEW
+%token VOID
+%token STATIC
+%token CLASS
 %token PUBLIC
 %token RETURN
 %token IF
@@ -73,11 +78,22 @@ int yyerror(const char *s);
 %type <minitypenode> minitype
 %type <vardeclarenode> vardeclare
 %type <methoddeclarenode> methoddeclare
+%type <classdeclarenode> classdeclare
+%type <classlistnode> classlist
 %type <prog> program
 
 %%
-///program : statelist { $$ = new pgm($1); root = $$; }
-program : vardeclares methodlist { $$ = new pgm($1, $2); root = $$; }
+program : classlist { $$ = new pgm($1); root = $$; }
+;
+///program : vardeclares methodlist { $$ = new pgm($1, $2); root = $$; }
+///;
+
+
+classlist : classlist classdeclare { $$ = $1; $1->push_back($2); }
+    | { $$ = new vector<class_declare_node *>(); }
+    ;
+
+classdeclare : CLASS ID LBRACE vardeclares methodlist RBRACE { $$ = new class_declare_node($2, $4, $5); }
 ;
 
 
@@ -86,11 +102,21 @@ methodlist : methodlist methoddeclare { $$ = $1; $1->push_back($2); }
     ;
 
 
-methoddeclare : PUBLIC minitype ID 
+methoddeclare :        PUBLIC STATIC VOID ID 
+                       LPAREN vardeclares RPAREN 
+                       LBRACE statelist RBRACE 
+                       { $$ = new method_declare_node($4, $6, $9, new exp_num_node(0)); }
+   |        PUBLIC STATIC minitype ID 
                        LPAREN vardeclares RPAREN 
                        LBRACE statelist
                        RETURN exp ';' RBRACE 
-                       {{ $$ = new method_declare_node($3, $5, $8, $10); }} 
+                       { $$ = new method_declare_node($4, $6, $9, $11); }
+                       
+    |                  PUBLIC minitype ID 
+                       LPAREN vardeclares RPAREN 
+                       LBRACE statelist
+                       RETURN exp ';' RBRACE 
+                       { $$ = new method_declare_node($3, $5, $8, $10); }
 ;
 
 
@@ -98,7 +124,8 @@ vardeclares : vardeclares vardeclare { $$ = $1; $1->push_back($2); }
     |   { $$ = new vector<state_node *>(); }
     ;
 
-vardeclare : minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
+vardeclare : STATIC vardeclare {{ $$ = $2; }}
+    | minitype ID ';' {{ $$ = new var_declare_node($1, $2); }}
     | ',' minitype ID {{ $$ = new var_declare_node($2, $3); }}
     | minitype ID {{ $$ = new var_declare_node($1, $2); }}
 ;

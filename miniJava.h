@@ -182,20 +182,29 @@ public:
 	method_declare_node(string id, vector<state_node *> *varlist, 
 						vector<state_node *> *statelist, exp_node *result);
 	void print();
-	int eval(var_map *v_map);
+	int eval(var_map *v_map=NULL);
 };
-	
+class class_declare_node{
+public:
+	exp_id_node *m_id;
+	vector<state_node *> *m_varlist;
+	vector<method_declare_node *> *m_methodlist;
+	class_declare_node(string id, vector<state_node *> *varlist,
+					   vector<method_declare_node *> *methodlist);
+	void print();
+	int eval(var_map *v_map=NULL);	
+};
 
-/*
+
 class pgm {
 public:
-	vector<state_node *> *m_statelist;
-	pgm(vector<state_node *> *statelist);
+	vector<class_declare_node *> *m_classlist;
+	pgm(vector<class_declare_node *> *classlist);
 	void print();
 	int eval();
 };
-*/
 
+/*
 class pgm {
 public:
 	vector<state_node *> *m_varlist;
@@ -205,5 +214,6 @@ public:
 	void print();
 	int eval();
 };
+*/
 
 extern pgm *root;
