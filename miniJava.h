@@ -90,6 +90,13 @@ public:
 	void print();
 	int eval(var_map *v_map);
 };
+class exp_length_node : public exp_node{
+public:
+	exp_node *m_exp;
+	exp_length_node(exp_node *exp);
+	void print();
+	int eval(var_map *v_map);
+};
 
 ////////// exp end /////////////
 

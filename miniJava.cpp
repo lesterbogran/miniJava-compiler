@@ -343,6 +343,18 @@ int exp_new_list_node::eval(var_map *v_map){
 	///to I really need to fix this?
 	return 0;
 }	
+exp_length_node::exp_length_node(exp_node *exp){
+	m_exp = exp;
+}
+void exp_length_node::print(){
+	cout << "(length ";
+	m_exp->print();
+	cout << ") ";
+}
+int exp_length_node::eval(var_map *v_map){
+	return 999; ///todo: fix it
+}
+
 
 type_node::type_node(string id){
 	m_id = new exp_id_node(id);

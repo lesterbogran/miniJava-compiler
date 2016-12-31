@@ -50,6 +50,10 @@ int yyerror(const char *s);
 %token <num> NUMBER
 %token <id> ID
 %token NEW
+%token TRUE
+%token FALSE
+%token THIS
+%token LENGTH
 %token VOID
 %token STATIC
 %token CLASS
@@ -136,6 +140,8 @@ minitype : ID  {{ $$ = new type_node($1); }}
 
 
 states : LBRACE statelist RBRACE { $$ = $2; }
+    | state { vector<state_node *>* tmp = new vector<state_node *>();
+              tmp->push_back($1); $$ = tmp; };
 ;
 
 statelist : statelist state { $$ = $1; $1->push_back($2); }
@@ -165,6 +171,11 @@ exp :   NUMBER { $$ = new exp_num_node($1); }
 	|	exp DIVIDE exp { $$ = new exp_operator_node("/", $1, $3); }
 	|	LPAREN exp RPAREN  { $$ = $2; }
     |   ID '[' exp ']' { $$ = new exp_at_node($1, $3); }
+    |   TRUE { $$ = new exp_num_node(1); }
+    |   FALSE { $$ = new exp_num_node(0); }
+    |   THIS {  $$ = new exp_id_node("this"); }
+    |   exp '.' LENGTH { $$ = new exp_length_node($1); }
+    |   exp '.' ID LPAREN exp RPAREN { $$ = new exp_num_node(0); }
     |   ID '.' ID { $$ = new exp_point_node($1, $3); }
     |   NEW ID LPAREN RPAREN { $$ = new exp_new_node($2); }
     |   NEW ID '[' exp ']' { $$ = new exp_new_list_node($2, $4); }

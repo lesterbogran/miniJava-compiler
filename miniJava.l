@@ -19,12 +19,17 @@ extern int column_num;
 %}
 
 DIGIT [0-9]
-LETTER [a-zA-Z]
+LETTER [a-zA-Z_]
 
 %x ERROR
 
 %%
 
+
+"true" { column_num+=4;return TRUE; }
+"false" { column_num+=5;return FALSE; }
+"this" { column_num+=4;return THIS; }
+"length" { column_num+=6;return LENGTH; }
 "void" { column_num+=4;return VOID; }
 "static" { column_num+=6;return STATIC; }
 "class" { column_num+=5;return CLASS; }
@@ -40,7 +45,7 @@ LETTER [a-zA-Z]
 	yylval.num = atof(yytext); return NUMBER;
 }
 
-{LETTER}[0-9a-zA-Z]* {
+{LETTER}[0-9a-zA-Z_]* {
     column_num+=strlen(yytext);
 	yylval.id = strdup(yytext); return ID;
 }
