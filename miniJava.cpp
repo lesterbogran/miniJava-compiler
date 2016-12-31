@@ -460,7 +460,7 @@ void class_declare_node::print(){
 	for(int i=0;i<m_methodlist->size();++i){
 		((*m_methodlist)[i])->print();
 	}
-	cout << ") ";
+	cout << ") " << endl;
 }
 int class_declare_node::eval(var_map *v_map){
 	int res = 0;
